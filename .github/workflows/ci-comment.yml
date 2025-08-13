@@ -20,6 +20,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           path: ./.metrics/
+          run-id: ${{ github.event.workflow_run.id }}
       - name: Install dependencies
         run: |
           python3 -m pip install prometheus-client
