@@ -36,7 +36,7 @@ while IFS= read -r -d '' diff_file; do
     echo "Generating summary for $snapshot_name"
     python3 ./scripts/e2e/metrics_summary.py \
         --diff "$diff_file" \
-        --output "$summary_file"
+        --output "$summary_file" \
         --artifact-link "$LINK_TO_ARTIFACT"
 
     summary_files+=("$summary_file")
