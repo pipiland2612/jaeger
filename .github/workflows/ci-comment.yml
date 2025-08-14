@@ -98,12 +98,6 @@ jobs:
         run: |
           bash ./scripts/e2e/metrics_summary.sh
 
-      - name: Debug PR number
-        if: success()
-        run: |
-          echo "Event JSON: ${{ toJSON(github.event) }}"
-          echo "Extracted PR: ${{ steps.download-artifacts.outputs.pr_number }}"
-
       - name: Post PR comment with combined metrics summary
         if: steps.compare-metrics.outputs.DIFF_FOUND == 'true' && steps.download-artifacts.outputs.pr_number
         uses: thollander/actions-comment-pull-request@v3
