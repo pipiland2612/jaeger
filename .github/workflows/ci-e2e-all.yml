@@ -18,5 +18,3 @@ permissions:
 jobs:
   elasticsearch:
     uses: ./.github/workflows/ci-e2e-elasticsearch.yml
-  opensearch:
-    uses: ./.github/workflows/ci-e2e-opensearch.yml
