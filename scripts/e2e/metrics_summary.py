@@ -115,9 +115,6 @@ def generate_diff_summary(changes, artifact_link=None):
             summary.append(f"  - Added variants: {len(versions['added'])}")
             summary.append(f"  - Removed variants: {len(versions['removed'])}")
 
-    # Add artifact link if provided
-    if artifact_link:
-        summary.append(f"\n➡️ [View detailed metrics for this comparison]({artifact_link})")
 
     return "\n".join(summary)
 

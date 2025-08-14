@@ -113,15 +113,9 @@ jobs:
         id: compare-metrics
         shell: bash
         run: |
-          ARTIFACT_LINKS=$(echo '${{ steps.download-artifacts.outputs.artifact_links }}' | jq -r '.')
-          
-          DIFF_ARTIFACT_LINK=$(echo "$ARTIFACT_LINKS" | jq -r 'to_entries[] | select(.key | startswith("diff_")) | .value' | head -1)
-          
-          if [ -z "$DIFF_ARTIFACT_LINK" ]; then
-            DIFF_ARTIFACT_LINK="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-          fi
-          
-          LINK_TO_ARTIFACT="$DIFF_ARTIFACT_LINK" bash ./scripts/e2e/metrics_summary.sh
+          bash ./scripts/e2e/metrics_summary.sh
+        env:
+          LINK_TO_ARTIFACT: "https://github.com/${{ github.repository }}/actions/runs/${{ github.event.workflow_run.id }}"
 
       - name: Post PR comment with combined metrics summary
         if: steps.compare-metrics.outputs.DIFF_FOUND == 'true' && steps.download-artifacts.outputs.pr_number
