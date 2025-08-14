@@ -115,9 +115,9 @@ def generate_diff_summary(changes, artifact_link=None):
             summary.append(f"  - Added variants: {len(versions['added'])}")
             summary.append(f"  - Removed variants: {len(versions['removed'])}")
 
-    # Add the artifact link if provided
+    # Add artifact link if provided
     if artifact_link:
-        summary.append(f"\n➡️ [View full metrics file]({artifact_link})")
+        summary.append(f"\n➡️ [View detailed metrics for this comparison]({artifact_link})")
 
     return "\n".join(summary)
 
@@ -125,7 +125,7 @@ def main():
     parser = argparse.ArgumentParser(description='Generate metrics diff summary')
     parser.add_argument('--diff', required=True, help='Path to unified diff file')
     parser.add_argument('--output', required=True, help='Output summary file path')
-    parser.add_argument('--artifact-link', required=False, help='Link to the artifact download')
+    parser.add_argument('--artifact-link', help='URL to the specific metrics artifact')
 
     args = parser.parse_args()
 

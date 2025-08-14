@@ -44,7 +44,7 @@ while IFS= read -r -d '' diff_file; do
     python3 ./scripts/e2e/metrics_summary.py \
         --diff "$diff_file" \
         --output "$summary_file" \
-        --artifact-link "$link_to_artifact"
+        --artifact-link "$LINK_TO_ARTIFACT"
 
     summary_files+=("$summary_file")
     echo "Generated summary at: $summary_file"
@@ -69,6 +69,7 @@ if $DIFF_FOUND; then
             echo "" >> "$METRICS_DIR/combined_summary.md"
         done
     fi
+
 else
     echo "No metric differences detected"
 fi
