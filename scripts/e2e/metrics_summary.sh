@@ -30,13 +30,21 @@ while IFS= read -r -d '' diff_file; do
     snapshot_name=${base_name#diff_}
     dir=$(dirname "$diff_file")
 
+    # Get artifact name from parent dir
+    artifact_name=$(basename "$dir")
+
+    # Get artifact link from map
+    artifact_map="$METRICS_DIR/artifact_map.json"
+    link_to_artifact=$(jq -r ".\"$artifact_name\"" "$artifact_map")
+
     # Generate summary for this diff
     summary_file="$dir/summary_$snapshot_name.md"
 
-    echo "Generating summary for $snapshot_name"
+    echo "Generating summary for $snapshot_name with link $link_to_artifact"
     python3 ./scripts/e2e/metrics_summary.py \
         --diff "$diff_file" \
-        --output "$summary_file"
+        --output "$summary_file" \
+        --artifact-link "$link_to_artifact"
 
     summary_files+=("$summary_file")
     echo "Generated summary at: $summary_file"
@@ -61,8 +69,6 @@ if $DIFF_FOUND; then
             echo "" >> "$METRICS_DIR/combined_summary.md"
         done
     fi
-
-    echo -e "\n\n➡️ [View full metrics file]($LINK_TO_ARTIFACT)" >> "$METRICS_DIR/combined_summary.md"
 else
     echo "No metric differences detected"
 fi
