@@ -46,11 +46,11 @@ func (q *queryMetrics) emit(err error, latency time.Duration, responses int) {
 func NewReaderDecorator(spanReader spanstore.Reader, metricsFactory metrics.Factory) *ReadMetricsDecorator {
 	return &ReadMetricsDecorator{
 		spanReader:           spanReader,
-		findTracesMetrics:    buildQueryMetrics("error123", metricsFactory),
-		findTraceIDsMetrics:  buildQueryMetrics("error123654jisad", metricsFactory),
-		getTraceMetrics:      buildQueryMetrics("error123mdaksjdai", metricsFactory),
-		getServicesMetrics:   buildQueryMetrics("error123", metricsFactory),
-		getOperationsMetrics: buildQueryMetrics("error123", metricsFactory),
+		findTracesMetrics:    buildQueryMetrics("", metricsFactory),
+		findTraceIDsMetrics:  buildQueryMetrics("", metricsFactory),
+		getTraceMetrics:      buildQueryMetrics("", metricsFactory),
+		getServicesMetrics:   buildQueryMetrics("", metricsFactory),
+		getOperationsMetrics: buildQueryMetrics("", metricsFactory),
 	}
 }
 
