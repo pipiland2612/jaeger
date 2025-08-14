@@ -115,7 +115,6 @@ def generate_diff_summary(changes, artifact_link=None):
             summary.append(f"  - Added variants: {len(versions['added'])}")
             summary.append(f"  - Removed variants: {len(versions['removed'])}")
 
-
     return "\n".join(summary)
 
 def main():
