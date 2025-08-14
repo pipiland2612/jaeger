@@ -18,15 +18,6 @@ jobs:
       fail-fast: false
       matrix:
         version:
-        - major: 6.x
-          distribution: elasticsearch
-          jaeger: v1
-        - major: 7.x
-          distribution: elasticsearch
-          jaeger: v1
-        - major: 8.x
-          distribution: elasticsearch
-          jaeger: v1
         - major: 8.x
           distribution: elasticsearch
           jaeger: v2

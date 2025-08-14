@@ -110,6 +110,7 @@ jobs:
               console.error(`Full workflow run context: ${JSON.stringify(context.payload.workflow_run, null, 2)}`);
               core.setFailed('Could not determine PR number for commenting.');
             }
+
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
