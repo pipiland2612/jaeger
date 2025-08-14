@@ -21,67 +21,7 @@ jobs:
 
       - name: Download all metrics artifacts from triggering workflow
         id: download-artifacts
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const { owner, repo } = context.repo;
-            const workflowRunId = context.payload.workflow_run.id;
-            
-            // List all artifacts from the triggering workflow run
-            const artifacts = await github.rest.actions.listWorkflowRunArtifacts({
-              owner,
-              repo,
-              run_id: workflowRunId,
-            });
-            
-            // Download and extract each artifact
-            const fs = require('fs');
-            const path = require('path');
-            const AdmZip = require('adm-zip');
-            
-            for (const artifact of artifacts.data.artifacts) {
-              const download = await github.rest.actions.downloadArtifact({
-                owner,
-                repo,
-                artifact_id: artifact.id,
-                archive_format: 'zip',
-              });
-            
-              const zip = new AdmZip(Buffer.from(download.data));
-              zip.extractAllTo(path.join(process.env.GITHUB_WORKSPACE, '.metrics', artifact.name), true);
-              console.log(`Extracted artifact: ${artifact.name}`);
-            }
-            
-            // Extract PR number (adapted from PDF logic)
-            let prNumber = null;
-            const pullRequest = await github.rest.pulls.list({
-              owner,
-              repo,
-              head: `${context.payload.workflow_run.head_repository.full_name}:${context.payload.workflow_run.head_branch}`,
-            });
-            
-            if (pullRequest.data.length > 0) {
-              prNumber = pullRequest.data[0].number;
-            } else {
-              // Fallback to commit SHA if needed
-              const commitSha = context.payload.workflow_run.head_sha;
-              const prsForCommit = await github.rest.repos.listPullRequestsAssociatedWithCommit({
-                owner,
-                repo,
-                commit_sha: commitSha,
-              });
-              if (prsForCommit.data.length > 0) {
-                prNumber = prsForCommit.data[0].number;
-              }
-            }
-            
-            if (prNumber) {
-              console.log(`Found PR Number: ${prNumber}`);
-              core.setOutput('pr_number', prNumber);
-            } else {
-              console.log('Could not determine PR number. Skipping comment.');
-              core.setFailed('Could not determine PR number for commenting.');
-            }
+        run: node .github/scripts/download-artifacts-and-get-pr.js
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
