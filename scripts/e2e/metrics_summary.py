@@ -79,7 +79,7 @@ def extract_metric_name(line):
         return line.split('{')[0].strip()
     return line.strip()
 
-def generate_diff_summary(changes):
+def generate_diff_summary(changes, artifact_link=None):
     """
     Generates a markdown summary from the parsed diff changes.
     """
@@ -115,8 +115,9 @@ def generate_diff_summary(changes):
             summary.append(f"  - Added variants: {len(versions['added'])}")
             summary.append(f"  - Removed variants: {len(versions['removed'])}")
 
-    # Preserve the artifact link placeholder
-    summary.append("\n➡️ [View full metrics file]($LINK_TO_ARTIFACT)")
+    # Add the artifact link if provided
+    if artifact_link:
+        summary.append(f"\n➡️ [View full metrics file]({artifact_link})")
 
     return "\n".join(summary)
 
@@ -124,11 +125,12 @@ def main():
     parser = argparse.ArgumentParser(description='Generate metrics diff summary')
     parser.add_argument('--diff', required=True, help='Path to unified diff file')
     parser.add_argument('--output', required=True, help='Output summary file path')
+    parser.add_argument('--artifact-link', required=False, help='Link to the artifact download')
 
     args = parser.parse_args()
 
     changes = parse_diff_file(args.diff)
-    summary = generate_diff_summary(changes)
+    summary = generate_diff_summary(changes, args.artifact_link)
 
     with open(args.output, 'w') as f:
         f.write(summary)

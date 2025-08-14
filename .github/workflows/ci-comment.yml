@@ -34,9 +34,18 @@ jobs:
               run_id: workflowRunId,
             });
             
-            // Download and extract each artifact
+            // Build artifact map with download URLs
+            const artifactMap = {};
+            artifacts.data.artifacts.forEach(artifact => {
+              artifactMap[artifact.name] = `https://github.com/${owner}/${repo}/actions/runs/${workflowRunId}/artifacts/${artifact.id}`;
+            });
+            
+            // Write map to file
             const fs = require('fs');
             const path = require('path');
+            fs.writeFileSync(path.join(process.env.GITHUB_WORKSPACE, '.metrics/artifact_map.json'), JSON.stringify(artifactMap));
+            
+            // Download and extract each artifact
             const AdmZip = require('adm-zip');
             
             for (const artifact of artifacts.data.artifacts) {
