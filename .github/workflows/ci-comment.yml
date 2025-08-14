@@ -97,6 +97,8 @@ jobs:
         shell: bash
         run: |
           bash ./scripts/e2e/metrics_summary.sh
+        env:
+          LINK_TO_ARTIFACT: "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
 
       - name: Post PR comment with combined metrics summary
         if: steps.compare-metrics.outputs.DIFF_FOUND == 'true' && steps.download-artifacts.outputs.pr_number
