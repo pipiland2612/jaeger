@@ -79,23 +79,29 @@ jobs:
               head: `${headRepo}:${headBranch}`,
             });
             
-            if (pullRequest.data.length > 0) {
-              prNumber = pullRequest.data[0].number;
-              console.log(`Found PR via branch search: #${prNumber}`);
+            const prArtifactPath = path.join(process.env.GITHUB_WORKSPACE, '.metrics', 'pr_number', 'pr_number.txt');
+            if (fs.existsSync(prArtifactPath)) {
+              prNumber = fs.readFileSync(prArtifactPath, 'utf8').trim();
+              console.log(`Found PR Number from artifact: ${prNumber}`);
             } else {
-              console.log('No PR found via branch search. Trying commit SHA...');
-            
-              // Second try: Find PR by commit SHA
-              console.log(`\nAttempt 2: Searching PRs for commit ${headSha}`);
-              const prsForCommit = await github.rest.repos.listPullRequestsAssociatedWithCommit({
-                owner,
-                repo,
-                commit_sha: headSha,
-              });
-            
-              if (prsForCommit.data.length > 0) {
-                prNumber = prsForCommit.data[0].number;
-                console.log(`Found PR via commit SHA: #${prNumber}`);
+              if (pullRequest.data.length > 0) {
+                prNumber = pullRequest.data[0].number;
+                console.log(`Found PR via branch search: #${prNumber}`);
+              } else {
+                console.log('No PR found via branch search. Trying commit SHA...');
+              
+                // Second try: Find PR by commit SHA
+                console.log(`\nAttempt 2: Searching PRs for commit ${headSha}`);
+                const prsForCommit = await github.rest.repos.listPullRequestsAssociatedWithCommit({
+                  owner,
+                  repo,
+                  commit_sha: headSha,
+                });
+              
+                if (prsForCommit.data.length > 0) {
+                  prNumber = prsForCommit.data[0].number;
+                  console.log(`Found PR via commit SHA: #${prNumber}`);
+                }
               }
             }
             
