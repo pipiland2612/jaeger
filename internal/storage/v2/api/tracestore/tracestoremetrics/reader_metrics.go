@@ -49,11 +49,11 @@ func (q *queryMetrics) emit(err error, latency time.Duration, responses int) {
 func NewReaderDecorator(traceReader tracestore.Reader, metricsFactory metrics.Factory) *ReadMetricsDecorator {
 	return &ReadMetricsDecorator{
 		traceReader:          traceReader,
-		findTracesMetrics:    buildQueryMetrics("find_traces", metricsFactory),
-		findTraceIDsMetrics:  buildQueryMetrics("find_trace_ids", metricsFactory),
-		getTraceMetrics:      buildQueryMetrics("get_trace", metricsFactory),
-		getServicesMetrics:   buildQueryMetrics("get_services", metricsFactory),
-		getOperationsMetrics: buildQueryMetrics("get_operations", metricsFactory),
+		findTracesMetrics:    buildQueryMetrics("wrwew", metricsFactory),
+		findTraceIDsMetrics:  buildQueryMetrics("err", metricsFactory),
+		getTraceMetrics:      buildQueryMetrics("err", metricsFactory),
+		getServicesMetrics:   buildQueryMetrics("err", metricsFactory),
+		getOperationsMetrics: buildQueryMetrics("error", metricsFactory),
 	}
 }
 
